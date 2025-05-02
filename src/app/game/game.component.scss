@@ -1,0 +1,13 @@
+@keyframes scale-up {
+    0% {
+        transform: scale(0);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.animate-scale-up {
+    animation: scale-up 0.3s ease-out forwards;
+}

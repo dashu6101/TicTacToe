@@ -1,0 +1,63 @@
+<div class="text-center font-sans p-6">
+    <!-- Input Controls To Set Board -->
+    <div class="flex flex-wrap justify-center items-end gap-4 mb-4">
+        <label class="flex items-center gap-2">
+            <span>Dimension:</span>
+            <input type="number" [(ngModel)]="dimension" min="3" max="15"
+                class="border px-2 py-1 rounded w-20 shadow" />
+        </label>
+
+        <label class="flex items-center gap-2">
+            <span>Winning Line Length:</span>
+            <input type="number" [(ngModel)]="winLength" min="3" [max]="dimension"
+                class="border px-2 py-1 rounded w-20 shadow" />
+        </label>
+        <label class="flex items-center gap-2">
+            <span>Number Of Players:</span>
+            <select [(ngModel)]="numberOfPlayers" (change)="updatePlayerCount(numberOfPlayers)"
+                class="border px-2 py-1 rounded">
+                <option *ngFor="let n of [2,3,4]" [value]="n">{{n}}</option>
+            </select>
+        </label>
+    </div>
+    
+    <!-- Button to Start and Reset Game -->
+    <div class="mb-6">
+        <button (click)="resetGame()" [disabled]="isInvalid"
+            [ngClass]="{
+                'bg-blue-500 hover:bg-blue-600': !isInvalid,
+                'bg-blue-500 opacity-50 cursor-not-allowed': isInvalid
+            }"
+            class="bg-gradient-to-r from-pink-500 to-yellow-400 text-white font-bold px-6 py-2 rounded-full hover:scale-105 transition-transform shadow-lg">
+            Start / Reset Game
+        </button>
+    </div>
+
+    <!-- Validation Messages -->
+    <div *ngIf="isInvalid" class="text-red-600 text-sm mb-4">
+        <div *ngIf="dimension < minDimension || dimension > maxDimension">Dimension must be between 3 and 15.</div>
+        <div *ngIf="winLength < maxDimension">Winning line length must be at least 3.</div>
+        <div *ngIf="winLength > dimension">Winning line length cannot exceed dimension.</div>
+    </div>
+
+    <!-- Game Winner / Trun Indication -->
+    <div *ngIf="winner" class="text-lg font-semibold text-green-600 mb-2">Winner: {{ winner }}</div>
+    <div *ngIf="!winner" class="text-lg font-medium mb-2">Current Turn: {{ players[currentPlayerIndex] }}</div>
+
+    <!-- Game Board -->
+    <div class="inline-block mt-4">
+        <div *ngFor="let row of board; let i = index" class="flex">
+            <button *ngFor="let cell of row; let j = index"
+                class="w-12 h-12 border border-gray-400 text-lg font-semibold flex items-center justify-center hover:bg-gray-100 relative overflow-hidden"
+                (click)="makeMove(i, j)">
+                <span class="transform text-black" *ngIf="cell" [ngClass]="{
+                    'scale-0 animate-scale-up': lastMove && lastMove[0] === i && lastMove[1] === j
+                  }">
+                    {{ cell }}
+                </span>
+                <div *ngIf="winner && isWinningCell(i, j)"
+                    class="absolute inset-0 bg-green-500 opacity-30 animate-pulse z-10 pointer-events-none"></div>
+            </button>
+        </div>
+    </div>
+</div>
