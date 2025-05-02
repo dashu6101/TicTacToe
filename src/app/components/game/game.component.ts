@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { GameSettings } from 'src/app/models/game-settings.model';
 
 @Component({
   selector: 'app-game',
@@ -6,16 +7,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./game.component.scss']
 })
 export class GameComponent {
-  dimension = 5;
-  winLength = 4;
-  numberOfPlayers = 3;
-  formModel = {
-    dimension: this.dimension,
-    winLength: this.winLength,
-    numberOfPlayers: this.numberOfPlayers
-  };
-  minDimension = 3;
-  maxDimension = 15;
+  settings = new GameSettings();
+  dimension = this.settings.dimension;
+  winLength = this.settings.winLength;
+  numberOfPlayers = this.settings.numberOfPlayers;
   board: string[][] = [];
   symbols = ['X', 'O', '△', '▢'];
   players = this.symbols.slice(0, this.numberOfPlayers);
@@ -27,15 +22,6 @@ export class GameComponent {
 
   ngOnInit(): void {
     this.resetGame();
-  }
-
-  get isInvalid(): boolean {
-    return (
-      this.formModel.dimension < this.minDimension ||
-      this.formModel.dimension > this.maxDimension ||
-      this.formModel.winLength < this.minDimension ||
-      this.formModel.winLength > this.formModel.dimension
-    );
   }
 
   initializeBoard(): void {
@@ -102,10 +88,10 @@ export class GameComponent {
   }
 
   resetGame(): void {
-    if (this.isInvalid) return;
-    this.dimension = this.formModel.dimension;
-    this.winLength = this.formModel.winLength;
-    this.numberOfPlayers = this.formModel.numberOfPlayers;
+    if (this.settings.isInvalid) return;
+    this.dimension = this.settings.dimension;
+    this.winLength = this.settings.winLength;
+    this.numberOfPlayers = this.settings.numberOfPlayers;
     this.initializeBoard();
     this.players = this.symbols.slice(0, this.numberOfPlayers);
     this.currentPlayerIndex = 0;
