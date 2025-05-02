@@ -3,28 +3,26 @@
     <div class="flex flex-wrap justify-center items-end gap-4 mb-4">
         <label class="flex items-center gap-2">
             <span>Dimension:</span>
-            <input type="number" [(ngModel)]="dimension" min="3" max="15"
+            <input type="number" [(ngModel)]="formModel.dimension" min="3" max="15"
                 class="border px-2 py-1 rounded w-20 shadow" />
         </label>
 
         <label class="flex items-center gap-2">
             <span>Winning Line Length:</span>
-            <input type="number" [(ngModel)]="winLength" min="3" [max]="dimension"
+            <input type="number" [(ngModel)]="formModel.winLength" min="3" [max]="dimension"
                 class="border px-2 py-1 rounded w-20 shadow" />
         </label>
         <label class="flex items-center gap-2">
             <span>Number Of Players:</span>
-            <select [(ngModel)]="numberOfPlayers" (change)="updatePlayerCount(numberOfPlayers)"
-                class="border px-2 py-1 rounded">
+            <select [(ngModel)]="formModel.numberOfPlayers" class="border px-2 py-1 rounded">
                 <option *ngFor="let n of [2,3,4]" [value]="n">{{n}}</option>
             </select>
         </label>
     </div>
-    
+
     <!-- Button to Start and Reset Game -->
     <div class="mb-6">
-        <button (click)="resetGame()" [disabled]="isInvalid"
-            [ngClass]="{
+        <button (click)="resetGame()" [disabled]="isInvalid" [ngClass]="{
                 'bg-blue-500 hover:bg-blue-600': !isInvalid,
                 'bg-blue-500 opacity-50 cursor-not-allowed': isInvalid
             }"
@@ -59,5 +57,8 @@
                     class="absolute inset-0 bg-green-500 opacity-30 animate-pulse z-10 pointer-events-none"></div>
             </button>
         </div>
+
+        <!-- Game Board Indication -->
+        <div class="text-sm font-semibold text-gray-600 mt-2">{{dimension}} X {{dimension}} | {{winLength}} Line Win | {{numberOfPlayers}} Players</div>
     </div>
 </div>

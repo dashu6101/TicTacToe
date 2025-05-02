@@ -9,6 +9,11 @@ export class GameComponent {
   dimension = 5;
   winLength = 4;
   numberOfPlayers = 3;
+  formModel = {
+    dimension: this.dimension,
+    winLength: this.winLength,
+    numberOfPlayers: this.numberOfPlayers
+  };
   minDimension = 3;
   maxDimension = 15;
   board: string[][] = [];
@@ -26,10 +31,10 @@ export class GameComponent {
 
   get isInvalid(): boolean {
     return (
-      this.dimension < this.minDimension ||
-      this.dimension > this.maxDimension ||
-      this.winLength < this.minDimension ||
-      this.winLength > this.dimension
+      this.formModel.dimension < this.minDimension ||
+      this.formModel.dimension > this.maxDimension ||
+      this.formModel.winLength < this.minDimension ||
+      this.formModel.winLength > this.formModel.dimension
     );
   }
 
@@ -97,7 +102,12 @@ export class GameComponent {
   }
 
   resetGame(): void {
+    if (this.isInvalid) return;
+    this.dimension = this.formModel.dimension;
+    this.winLength = this.formModel.winLength;
+    this.numberOfPlayers = this.formModel.numberOfPlayers;
     this.initializeBoard();
+    this.players = this.symbols.slice(0, this.numberOfPlayers);
     this.currentPlayerIndex = 0;
     this.winner = null;
     this.moves = 0;
